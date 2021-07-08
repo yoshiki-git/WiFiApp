@@ -1,16 +1,26 @@
 package com.example.wifiapp
 
 import android.app.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.wifi.WifiManager
 import android.os.IBinder
+import android.util.Log
+import android.widget.Toast
+import java.io.File
+import java.lang.StringBuilder
 
 class MyService : Service() {
-    val TAG = "TestApp"
+    val TAG = "AppService"
 
     private lateinit var context: Context
     private lateinit var getLogData: GetLogData
+    private lateinit var file :File
     private val getTimeData=GetTimeData()
+    lateinit var wifiManager: WifiManager
+
 
     override fun onCreate() {
         super.onCreate()
@@ -20,7 +30,35 @@ class MyService : Service() {
         context=applicationContext
         //getLogData生成
         getLogData= GetLogData(context)
+
+        //ファイル名を現在時刻に設定する
+        val start_time=getTimeData.getFileName()
+        //拡張子をつける
+        val fileName=start_time+"_Log"+".txt"
+        file=getLogData.getFileStatus(fileName)
+
+        wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+/*
+        val wifiScanReceiver = object : BroadcastReceiver(){
+
+            override fun onReceive(context: Context, intent: Intent) {
+                val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+                if (success) {
+                    scanSuccess()
+                } else {
+                    scanFailure()
+                }
+            }
+        }
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        context.registerReceiver(wifiScanReceiver, intentFilter)
+        */
+
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -66,6 +104,14 @@ class MyService : Service() {
         // startForeground 第一引数のidで通知を識別
         startForeground(9999, notification)
 
+        val success = wifiManager.startScan()
+        if (success) {
+            // scan failure handling
+            scanSuccess()
+        }else{
+            scanFailure()
+        }
+
         //毎回Alarmの設定
         setNextAlarmService(context)
 
@@ -95,6 +141,35 @@ class MyService : Service() {
         // アラームを解除する
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pendingIntent)
+    }
+
+
+    fun scanSuccess() {
+        val results = wifiManager.scanResults
+        Toast.makeText(this,"Scanしたよ", Toast.LENGTH_SHORT).show()
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(getTimeData.getNowTime())
+            .append(",")
+            .append("$results")
+            .append("\n")
+        getLogData.getLog(file,stringBuilder.toString())
+        Log.d(TAG,"wi-fi scan succeeded")
+    }
+
+    fun scanFailure() {
+        // handle failure: new scan did NOT succeed
+        // consider using old scan results: these are the OLD results!
+        //Doze中、画面消灯時にはWifiスキャンは失敗する
+        //位置情報オフでも失敗する
+        Toast.makeText(this,"WifiScanが失敗しました", Toast.LENGTH_SHORT).show()
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(getTimeData.getNowTime())
+                     .append(",")
+                     .append("wi-fi scan failed")
+                     .append("\n")
+        getLogData.getLog(file,stringBuilder.toString())
+        Log.d(TAG,"wi-fi scan failed")
+
     }
 
     override fun onBind(intent: Intent): IBinder {

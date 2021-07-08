@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
         android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
-    lateinit var wifiManager:WifiManager
     lateinit var context: Context
 
 
@@ -59,43 +58,11 @@ class MainActivity : AppCompatActivity() {
 
 
         context=applicationContext
-        wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-
-        val wifiScanReceiver = object : BroadcastReceiver(){
-
-            override fun onReceive(context: Context, intent: Intent) {
-                val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
-                if (success) {
-                    scanSuccess()
-                } else {
-                    scanFailure()
-                }
-            }
-
-        }
-
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        context.registerReceiver(wifiScanReceiver, intentFilter)
-
-        val success = wifiManager.startScan()
-        if (!success) {
-            // scan failure handling
-            scanFailure()
-        }
 
 
 
         val wifi_scan: Button =findViewById(R.id.btn_wifi_scan)
-        wifi_scan.setOnClickListener {
-            val success = wifiManager.startScan()
-            if (success) {
-                // scan failure handling
-                scanSuccess()
-            }else{
-                scanFailure()
-            }
-        }
+
 
         val btn_ser_start:Button = findViewById(R.id.ser_start)
         val btn_ser_stop : Button = findViewById(R.id.ser_stop)
@@ -117,22 +84,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-    fun scanSuccess() {
-        val results = wifiManager.scanResults
-        Toast.makeText(this,"Scanしたよ",Toast.LENGTH_SHORT).show()
-        Log.d(TAG,results.toString())
-    }
-
-    fun scanFailure() {
-        // handle failure: new scan did NOT succeed
-        // consider using old scan results: these are the OLD results!
-        val results = wifiManager.scanResults
-        Toast.makeText(this,"WifiScanが失敗しました",Toast.LENGTH_SHORT).show()
-        Log.d(TAG,results.toString())
-
-    }
-
 
 
     //Permissionチェックのメソッド
