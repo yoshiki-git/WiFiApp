@@ -24,6 +24,9 @@ class MyService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        //アラームの終了
+        stopAlarmService()
+        //サービス終了
         stopSelf()
     }
 
@@ -63,11 +66,36 @@ class MyService : Service() {
         // startForeground 第一引数のidで通知を識別
         startForeground(9999, notification)
 
+        //毎回Alarmの設定
+        setNextAlarmService(context)
+
         //return START_NOT_STICKY;
         //return START_STICKY;
         return START_REDELIVER_INTENT
     }
+    // 次のアラームの設定
+    private fun setNextAlarmService(context: Context) {
 
+        // 30s毎のアラーム設定
+        val repeatPeriod = (30 * 1000).toLong()
+        val intent = Intent(context, MyService::class.java)
+        val startMillis = System.currentTimeMillis() + repeatPeriod
+        val pendingIntent = PendingIntent.getService(context, 0, intent, 0)
+        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            startMillis, pendingIntent
+        )
+    }
+
+    private fun stopAlarmService() {
+        val indent = Intent(context, MyService::class.java)
+        val pendingIntent = PendingIntent.getService(context, 0, indent, 0)
+
+        // アラームを解除する
+        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+    }
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
