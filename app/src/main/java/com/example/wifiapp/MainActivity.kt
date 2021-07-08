@@ -97,7 +97,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val wifi_result:TextView=findViewById(R.id.tv_wifi_result)
+        val btn_ser_start:Button = findViewById(R.id.ser_start)
+        val btn_ser_stop : Button = findViewById(R.id.ser_stop)
+
+        btn_ser_start.setOnClickListener {
+            val intent = Intent(this,MyService::class.java)
+            startForegroundService(intent)
+            btn_ser_start.isEnabled = false
+            btn_ser_stop.isEnabled = true
+        }
+        btn_ser_stop.setOnClickListener {
+            val intent = Intent(this,MyService::class.java)
+            stopService(intent)
+            btn_ser_stop.isEnabled = false
+            btn_ser_start.isEnabled = true
+        }
+
+     //   val wifi_result:TextView=findViewById(R.id.tv_wifi_result)
 
 
     }
