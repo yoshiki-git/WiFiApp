@@ -17,7 +17,7 @@ class GetTimeData {
 
     //時刻を取得する関数　ログデータ用日付無し
     fun getNowTime(): String {
-        val df: DateFormat = SimpleDateFormat("HH:mm:ss.SSS")
+        val df: DateFormat = SimpleDateFormat("HH:mm:ss")
         val date = Date(System.currentTimeMillis())
         return df.format(date)
     }

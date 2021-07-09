@@ -1,16 +1,15 @@
 package com.example.wifiapp
 
 import android.app.*
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
+import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import java.io.File
-import java.lang.StringBuilder
 
 class MyService : Service() {
     val TAG = "AppService"
@@ -20,6 +19,7 @@ class MyService : Service() {
     private lateinit var file :File
     private val getTimeData=GetTimeData()
     lateinit var wifiManager: WifiManager
+    lateinit var wifi_info:WifiInfo
 
 
     override fun onCreate() {
@@ -38,6 +38,20 @@ class MyService : Service() {
         file=getLogData.getFileStatus(fileName)
 
         wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        wifi_info = wifiManager.connectionInfo
+
+        //カラムの作成
+        val columns = mutableListOf<String>()
+        columns.add("timestamp")
+        columns.add("SSID")
+        columns.add("BSSID")
+        columns.add("Connected")
+        columns.add("IP Address")
+        columns.add("Link Speed")
+        columns.add("capabilities")
+        columns.add("level")
+        columns.add("frequency")
+        getLogData.getColumn(file,columns)
 /*
         val wifiScanReceiver = object : BroadcastReceiver(){
 
@@ -143,17 +157,61 @@ class MyService : Service() {
         alarmManager.cancel(pendingIntent)
     }
 
-
+    //スキャン成功時にWifi情報を取得し記録する
     fun scanSuccess() {
-        val results = wifiManager.scanResults
-        Toast.makeText(this,"Scanしたよ", Toast.LENGTH_SHORT).show()
-        val stringBuilder = StringBuilder()
-        stringBuilder.append(getTimeData.getNowTime())
-            .append(",")
-            .append("$results")
-            .append("\n")
-        getLogData.getLog(file,stringBuilder.toString())
+        val results:List<ScanResult> = wifiManager.scanResults
+        Toast.makeText(this,"Scan Succeeded", Toast.LENGTH_SHORT).show()
+        val time=getTimeData.getNowTime()
+
+        val bssid_connected:String
+        if (wifi_info.bssid ==null){
+            bssid_connected = "null"
+        }else{
+            bssid_connected = wifi_info.bssid
+        }
+
+        for (i in results){
+            val stringBuilder = StringBuilder()
+            stringBuilder.append(time)
+                .append(",")
+                .append(i.timestamp)
+                .append(",")
+                .append(i.SSID)
+                .append(",")
+                .append(i.BSSID)
+                .append(",")
+            if (bssid_connected ==i.BSSID){
+                val ip_addr_i:Int = wifi_info.ipAddress
+                val ip_addr =
+                    (ip_addr_i shr 0 and 0xFF).toString() + "." + (ip_addr_i shr 8 and 0xFF) + "." + (ip_addr_i shr 16 and 0xFF) + "." + (ip_addr_i shr 24 and 0xFF)
+                stringBuilder.append("true")
+                    .append(",")
+                    .append(ip_addr)
+                    .append(",")
+                    .append(wifi_info.linkSpeed)
+           //     Log.d(TAG,"rxlinkspeed:${wifi_info.rxLinkSpeedMbps}")
+                Log.d(TAG,"linkspeed:${wifi_info.linkSpeed}")
+            }else{
+                stringBuilder.append("false")
+                    .append(",")
+                    .append("N/A")
+                    .append(",")
+                    .append("N/A")
+            }
+
+            stringBuilder.append(",")
+                .append(i.capabilities)
+                .append(",")
+                .append(i.level)
+                .append(",")
+                .append(i.frequency)
+                .append("\n")
+            getLogData.getLog(file,stringBuilder.toString())
+
+        }
+
         Log.d(TAG,"wi-fi scan succeeded")
+        Log.d(TAG,"scan result:${results[0]}")
     }
 
     fun scanFailure() {
@@ -176,3 +234,5 @@ class MyService : Service() {
         TODO("Return the communication channel to the service.")
     }
 }
+
+
