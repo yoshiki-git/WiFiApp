@@ -38,7 +38,7 @@ class MyService : Service() {
         file=getLogData.getFileStatus(fileName)
 
         wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        wifi_info = wifiManager.connectionInfo
+     //   wifi_info = wifiManager.connectionInfo
 
         //カラムの作成
         val columns = mutableListOf<String>()
@@ -159,17 +159,32 @@ class MyService : Service() {
 
     //スキャン成功時にWifi情報を取得し記録する
     fun scanSuccess() {
-        val results:List<ScanResult> = wifiManager.scanResults
-        Toast.makeText(this,"Scan Succeeded", Toast.LENGTH_SHORT).show()
-        val time=getTimeData.getNowTime()
+        Log.d(TAG,"wi-fi scan succeeded")
 
+        //スキャン結果の受け取り
+        val results:List<ScanResult> = wifiManager.scanResults
+        //スキャン成功時にトーストで通知
+        Toast.makeText(this,"Scan Succeeded", Toast.LENGTH_SHORT).show()
+        //ログデータ用に時刻を取得
+        val time=getTimeData.getNowTime()
+        //現在接続しているWifiの情報を取得する
+        wifi_info = wifiManager.connectionInfo
+        //BSSIDにより、ScanResultの中から、接続しているWifiを特定する
         val bssid_connected:String
+        //何も接続していない場合
         if (wifi_info.bssid ==null){
             bssid_connected = "null"
+            Log.d(TAG,"Do not connect")
+            Log.d(TAG,"Connected: ${wifi_info.ssid}")
+            Log.d(TAG,"linkspeed:${wifi_info.linkSpeed}")
         }else{
+            //接続していた場合、BSSIDと回線速度をログで表示
             bssid_connected = wifi_info.bssid
+            Log.d(TAG,"Connected: ${wifi_info.ssid}")
+            Log.d(TAG,"linkspeed:${wifi_info.linkSpeed}")
         }
 
+        //取得結果はBSSID毎にScanResultの配列となっている。この中から必要な情報をログに保存する
         for (i in results){
             val stringBuilder = StringBuilder()
             stringBuilder.append(time)
@@ -180,6 +195,8 @@ class MyService : Service() {
                 .append(",")
                 .append(i.BSSID)
                 .append(",")
+            //接続しているWifiの場合はIPアドレスと回線速度が取得可能なので取得する
+            //if分によりBSSIDを照合
             if (bssid_connected ==i.BSSID){
                 val ip_addr_i:Int = wifi_info.ipAddress
                 val ip_addr =
@@ -189,8 +206,9 @@ class MyService : Service() {
                     .append(ip_addr)
                     .append(",")
                     .append(wifi_info.linkSpeed)
+                //API29以降はrxlinkspeed(下り回線速度）txlinkspeed(上り回線速度）の取得が可能。
+                //該当端末が手元にないので今回は割愛
            //     Log.d(TAG,"rxlinkspeed:${wifi_info.rxLinkSpeedMbps}")
-                Log.d(TAG,"linkspeed:${wifi_info.linkSpeed}")
             }else{
                 stringBuilder.append("false")
                     .append(",")
@@ -210,10 +228,10 @@ class MyService : Service() {
 
         }
 
-        Log.d(TAG,"wi-fi scan succeeded")
-        Log.d(TAG,"scan result:${results[0]}")
+    //    Log.d(TAG,"scan result:${results[0]}")
     }
 
+    //スキャン失敗時の処理
     fun scanFailure() {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!

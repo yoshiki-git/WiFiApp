@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -21,8 +22,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
 class MainActivity : AppCompatActivity() {
-
-
+    //Wifiスキャン条件
+    //Wifiオン、位置情報オン、画面点灯、2分につき4回までの制限がある
     private val REQUEST_CODE : Int = 1000
     private val TAG ="TestApp"
     private val permissions = arrayOf(
@@ -45,6 +46,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //画面を常時点灯設定にする。
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         //permissionチェック
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){

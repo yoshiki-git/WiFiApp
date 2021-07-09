@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_warning"/>
+            android:text="Wifiと位置情報の設定をオンにしてください。\nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。 "/>
         <Button
             android:id="@+id/btn_wifi_scan"
             android:text="@string/wifi_scan"

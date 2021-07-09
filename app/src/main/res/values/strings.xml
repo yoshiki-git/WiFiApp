@@ -3,5 +3,6 @@
     <string name="wifi_scan">Wi-Fi SCAN</string>
     <string name="btn_ser_start">ログ取得開始</string>
     <string name="btn_ser_stop">ログ取得停止</string>
-    <string name="tv_warning">Wifiと位置情報の設定をオンにしてください</string>
+    <string name="tv_warning">Wifiと位置情報の設定をオンにしてください。
+        \nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。</string>
 </resources>
