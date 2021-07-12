@@ -20,13 +20,13 @@
                     android:layout_marginTop="10sp"
                     android:orientation="horizontal">
                     <Button
-                        android:layout_width="200sp"
+                        android:layout_width="180sp"
                         android:layout_height="wrap_content"
                         android:enabled="true"
                         android:id="@+id/ser_start"
                         android:text="@string/btn_ser_start"/>
                     <Button
-                        android:layout_width="200sp"
+                        android:layout_width="180sp"
                         android:layout_height="wrap_content"
                         android:enabled="false"
                         android:layout_marginStart="10sp"

@@ -20,6 +20,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
     //Wifiスキャン条件
@@ -41,6 +44,10 @@ class MainActivity : AppCompatActivity() {
         android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
     lateinit var context: Context
+
+    //RecyclerViewのアダプター
+    lateinit var mAdapter: CustomAdapter
+    lateinit var  mWifiList: ArrayList<Wifi_Info>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +71,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+        //アクティビティ上にWifiを表示するボタン
         val wifi_scan: Button =findViewById(R.id.btn_wifi_scan)
 
 
@@ -83,9 +91,22 @@ class MainActivity : AppCompatActivity() {
             btn_ser_start.isEnabled = true
         }
 
-     //   val wifi_result:TextView=findViewById(R.id.tv_wifi_result)
+        //テキトーなデータ
+        val df_wifiInfo = Wifi_Info("null","null",0,0,R.drawable.wifi_con)
+        mWifiList = arrayListOf(df_wifiInfo)
 
+        //RecyclerView取得
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
 
+        //境界線の設置
+        val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
+        recyclerView.addItemDecoration(dividerItemDecoration)
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // CustomAdapterの生成と設定
+        mAdapter = CustomAdapter(mWifiList)
+        recyclerView.adapter = mAdapter
     }
 
 
