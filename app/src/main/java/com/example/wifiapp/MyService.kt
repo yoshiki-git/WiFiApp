@@ -110,7 +110,7 @@ class MyService : Service() {
         val notification = Notification.Builder(context, channelId)
             .setContentTitle(title) // android標準アイコンから
             .setSmallIcon(android.R.drawable.ic_media_play)
-            .setContentText("Monitoring Now")
+            .setContentText("Wifiログ取得中")
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setWhen(System.currentTimeMillis())
@@ -160,12 +160,13 @@ class MyService : Service() {
 
     //スキャン成功時にWifi情報を取得し記録する
     fun scanSuccess() {
-        Log.d(TAG,"wi-fi scan succeeded")
+        Log.d(TAG,"wifi scan succeeded")
 
         //スキャン結果の受け取り
         val results:List<ScanResult> = wifiManager.scanResults
+
         //スキャン成功時にトーストで通知
-        Toast.makeText(this,"Scan Succeeded", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"wifi scan 成功", Toast.LENGTH_SHORT).show()
         //ログデータ用に時刻を取得
         val time=getTimeData.getNowTime()
         //現在接続しているWifiの情報を取得する
@@ -238,7 +239,7 @@ class MyService : Service() {
         // consider using old scan results: these are the OLD results!
         //Doze中、画面消灯時にはWifiスキャンは失敗する
         //位置情報オフでも失敗する
-        Toast.makeText(this,"WifiScanが失敗しました", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"wifi scan 失敗", Toast.LENGTH_SHORT).show()
         val stringBuilder = StringBuilder()
         stringBuilder.append(getTimeData.getNowTime())
                      .append(",")
