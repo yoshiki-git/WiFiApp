@@ -61,13 +61,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(TAG,"onCreate")
         //画面を常時点灯設定にする。
-   //     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        val wakeLock: PowerManager.WakeLock =
-            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyApp::MyWakelockTag").apply {
-                    acquire()
-                }
-            }
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         //permissionチェック
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
             checkPermission(permissionsQ,REQUEST_CODE)

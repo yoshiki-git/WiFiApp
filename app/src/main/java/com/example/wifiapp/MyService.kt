@@ -166,7 +166,7 @@ class MyService : Service() {
         val results:List<ScanResult> = wifiManager.scanResults
 
         //スキャン成功時にトーストで通知
-    //    Toast.makeText(this,"wifi scan 成功", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"wifi scan 成功", Toast.LENGTH_SHORT).show()
         //ログデータ用に時刻を取得
         val time=getTimeData.getNowTime()
         //現在接続しているWifiの情報を取得する
@@ -239,7 +239,7 @@ class MyService : Service() {
         // consider using old scan results: these are the OLD results!
         //Doze中、画面消灯時にはWifiスキャンは失敗する
         //位置情報オフでも失敗する
-    //    Toast.makeText(this,"wifi scan 失敗", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,"wifi scan 失敗", Toast.LENGTH_SHORT).show()
         val stringBuilder = StringBuilder()
         stringBuilder.append(getTimeData.getNowTime())
                      .append(",")
