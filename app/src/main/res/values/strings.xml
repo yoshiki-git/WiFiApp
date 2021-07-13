@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WiFiApp</string>
-    <string name="wifi_scan">Wi-Fi SCAN</string>
+    <string name="wifi_scan">ビューの更新</string>
     <string name="btn_ser_start">ログ取得開始</string>
     <string name="btn_ser_stop">ログ取得停止</string>
     <string name="tv_warning">Wifiと位置情報の設定をオンにしてください。

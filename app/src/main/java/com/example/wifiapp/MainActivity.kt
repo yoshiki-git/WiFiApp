@@ -7,6 +7,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.net.wifi.ScanResult
+import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.Bundle
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     //Wifiスキャン条件
     //Wifiオン、位置情報オン、画面点灯、2分につき4回までの制限がある
     private val REQUEST_CODE : Int = 1000
-    private val TAG ="TestApp"
+    private val TAG ="appMainActivity"
     private val permissions = arrayOf(
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -44,15 +46,25 @@ class MainActivity : AppCompatActivity() {
         android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
     lateinit var context: Context
+    lateinit var wifiManager: WifiManager
+    //Wifimanager.WifiInfoの方
+    lateinit var conWifi_Info: WifiInfo
 
+    lateinit var wifiScanReceiver:BroadcastReceiver
+
+
+    lateinit var recyclerView:RecyclerView
     //RecyclerViewのアダプター
     lateinit var mAdapter: CustomAdapter
-    lateinit var  mWifiList: ArrayList<Wifi_Info>
+    var  mWifiList = mutableListOf<Wifi_Info>()
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.d(TAG,"onCreate")
         //画面を常時点灯設定にする。
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
@@ -67,14 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        context=applicationContext
-
-
-
-        //アクティビティ上にWifiを表示するボタン
-        val wifi_scan: Button =findViewById(R.id.btn_wifi_scan)
-
-
+        //ログ保存のボタン処理
         val btn_ser_start:Button = findViewById(R.id.ser_start)
         val btn_ser_stop : Button = findViewById(R.id.ser_stop)
 
@@ -91,22 +96,133 @@ class MainActivity : AppCompatActivity() {
             btn_ser_start.isEnabled = true
         }
 
-        //テキトーなデータ
-        val df_wifiInfo = Wifi_Info("null","null",0,0,R.drawable.wifi_con)
-        mWifiList = arrayListOf(df_wifiInfo)
+
+        context=applicationContext
+/*
+        wifiScanReceiver = object : BroadcastReceiver() {
+
+            override fun onReceive(context: Context, intent: Intent) {
+                val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+                if (success) {
+                    Log.d(TAG,"wifi scan succeeded")
+                } else {
+                    Log.d(TAG,"wifi scan failed")
+                }
+            }
+        }
+
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+        context.registerReceiver(wifiScanReceiver, intentFilter)
+
+ */
 
         //RecyclerView取得
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-
+        recyclerView = findViewById(R.id.recycler_view)
         //境界線の設置
         val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager(this).orientation)
         recyclerView.addItemDecoration(dividerItemDecoration)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
+        mAdapter = CustomAdapter(mWifiList)
+        recyclerView.adapter = mAdapter
+
+
+        wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
+        val creScanResult=wifiManager.startScan()
+
+        if (creScanResult){
+            Log.d(TAG,"wifi scan succeeded")
+            scanSuccess()
+        }else{
+            Log.d(TAG,"wifi scan failed")
+            scanFailure()
+        }
+/*
+        // CustomAdapterの生成と設定
+        mAdapter = CustomAdapter(mWifiList)
+        recyclerView.adapter = mAdapter
+
+ */
+
+        //アクティビティ上にWifiを表示するボタン
+        val wifi_scan: Button =findViewById(R.id.btn_wifi_scan)
+        wifi_scan.setOnClickListener {
+            val scan_judgement=wifiManager.startScan()
+            if (scan_judgement){
+                //スキャン成功時にトーストで通知
+                Toast.makeText(this,"Scan Succeeded", Toast.LENGTH_SHORT).show()
+                Log.d(TAG,"wifi scan succeeded")
+                scanSuccess()
+            }else{
+                Toast.makeText(this,"Scan Failed", Toast.LENGTH_SHORT).show()
+                Log.d(TAG,"wifi scan failed")
+            }
+
+        }
+    }
+
+    fun scanSuccess(){
+        mWifiList.clear()
+        Log.d(TAG,"mWifiList clear")
+        val results:List<ScanResult> = wifiManager.scanResults
+        conWifi_Info = wifiManager.connectionInfo
+        Log.d(TAG,"results size:${results.size}")
+
+
+        //BSSIDにより、ScanResultの中から、接続しているWifiを特定する
+        val bssid_connected:String
+        //何も接続していない場合
+        if (conWifi_Info.bssid ==null){
+            bssid_connected = "null"
+            Log.d(TAG,"Do not connect")
+            Log.d(TAG,"Connected: ${conWifi_Info.ssid}")
+            Log.d(TAG,"linkspeed:${conWifi_Info.linkSpeed}")
+        }else{
+            //接続していた場合、BSSIDと回線速度をログで表示
+            bssid_connected = conWifi_Info.bssid
+            Log.d(TAG,"Connected: ${conWifi_Info.ssid}")
+            Log.d(TAG,"linkspeed:${conWifi_Info.linkSpeed}")
+        }
+
+        for (i in results){
+            if (bssid_connected ==i.BSSID){
+                mWifiList.add(Wifi_Info(i.SSID,i.BSSID,i.level,i.frequency,R.drawable.wifi_con))
+                Log.d(TAG,"mWifiList add")
+
+            }else{
+                mWifiList.add(Wifi_Info(i.SSID,i.BSSID,i.level,i.frequency,R.drawable.wifi))
+                Log.d(TAG,"mWifiList add")
+            }
+        }
+        Log.d(TAG,"mWifiList:$mWifiList")
+        // CustomAdapterの生成と設定
+        mAdapter = CustomAdapter(mWifiList)
+        recyclerView.adapter = mAdapter
+    }
+
+    fun scanFailure(){
+        //テキトーなデータ
+        val df_wifiInfo = Wifi_Info("null","null",0,0,R.drawable.wifi_con)
+        mWifiList .add(df_wifiInfo)
+        Log.d(TAG,"mWifiList:$mWifiList")
 
         // CustomAdapterの生成と設定
         mAdapter = CustomAdapter(mWifiList)
         recyclerView.adapter = mAdapter
+    }
+
+
+
+    override fun onDestroy() {
+        Log.d(TAG,"onDestroy")
+        super.onDestroy()
+ //       context.unregisterReceiver(wifiScanReceiver)
+    }
+
+    override fun onBackPressed() {
+        //中身を空にする ⇒　戻るボタンが使えないようになる
     }
 
 

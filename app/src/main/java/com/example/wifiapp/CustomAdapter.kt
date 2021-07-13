@@ -1,5 +1,6 @@
 package com.example.wifiapp
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,7 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CustomAdapter(private val wifi_list :ArrayList<Wifi_Info>):RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class CustomAdapter(private val wifi_list :List<Wifi_Info>):RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+    private val TAG = "CustomAdapter"
 
     // Viewの初期化
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -35,12 +37,14 @@ class CustomAdapter(private val wifi_list :ArrayList<Wifi_Info>):RecyclerView.Ad
     // Viewの設定
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val wifi = wifi_list[position]
+        Log.d(TAG,wifi.level.toString())
+        Log.d(TAG,wifi.freq.toString())
 
         viewHolder.image.setImageResource(wifi.ImageId)
         viewHolder.ssid.text = wifi.ssid
         viewHolder.bssid.text = wifi.bssid
-        viewHolder.level.text =wifi.level.toString()
-        viewHolder.freq.text = wifi.freq.toString()
+        viewHolder.level.text ="${wifi.level}dBm"
+        viewHolder.freq.text = "${wifi.freq}MHz"
     }
 
     // 表示数を返す

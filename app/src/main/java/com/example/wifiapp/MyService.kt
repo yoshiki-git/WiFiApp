@@ -19,6 +19,7 @@ class MyService : Service() {
     private lateinit var file :File
     private val getTimeData=GetTimeData()
     lateinit var wifiManager: WifiManager
+    //Wifimanager.WifiInfoの方
     lateinit var wifi_info:WifiInfo
 
 
