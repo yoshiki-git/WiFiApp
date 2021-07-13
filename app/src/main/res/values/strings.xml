@@ -5,4 +5,7 @@
     <string name="btn_ser_stop">ログ取得停止</string>
     <string name="tv_warning">Wifiと位置情報の設定をオンにしてください。
         \nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。</string>
+    <string name="bs_dialog_message">アプリを終了しますか</string>
+    <string name="bs_dialog_yes">はい</string>
+    <string name="bs_dialog_no">いいえ</string>
 </resources>
