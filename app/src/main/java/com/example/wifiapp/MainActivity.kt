@@ -59,9 +59,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var mAdapter: CustomAdapter
     var  mWifiList = mutableListOf<Wifi_Info>()
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
