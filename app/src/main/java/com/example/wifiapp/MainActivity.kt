@@ -9,10 +9,7 @@ import android.net.Uri
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
+import android.os.*
 import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
@@ -67,8 +64,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(TAG,"onCreate")
         //画面を常時点灯設定にする。
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
+   //     window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        val wakeLock: PowerManager.WakeLock =
+            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+                newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "MyApp::MyWakelockTag").apply {
+                    acquire()
+                }
+            }
         //permissionチェック
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
             checkPermission(permissionsQ,REQUEST_CODE)
@@ -248,6 +250,7 @@ class MainActivity : AppCompatActivity() {
         context.unregisterReceiver(wifiScanReceiver)
     }
 
+    //戻るボタンを押した際にダイアログを表示
     override fun onBackPressed() {
         val dialog = BackPressedDialogFragment()
         dialog.show(supportFragmentManager,"id")
