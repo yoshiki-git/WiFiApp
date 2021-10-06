@@ -52,6 +52,7 @@ class MyService : Service() {
         columns.add("capabilities")
         columns.add("level")
         columns.add("frequency")
+        columns.add("ChannelBandWidth")
         getLogData.getColumn(file,columns)
 /*
         val wifiScanReceiver = object : BroadcastReceiver(){
@@ -225,6 +226,8 @@ class MyService : Service() {
                 .append(i.level)
                 .append(",")
                 .append(i.frequency)
+                .append(",")
+                .append(channelWidthToString(i.channelWidth))
                 .append("\n")
             getLogData.getLog(file,stringBuilder.toString())
 
@@ -249,6 +252,16 @@ class MyService : Service() {
         Log.d(TAG,"wi-fi scan failed")
 
     }
+
+    fun channelWidthToString(i:Int) =
+        when(i){
+            0 -> "20MHz"
+            1 -> "40MHz"
+            2 -> "80MHz"
+            3 -> "160MHz"
+            4 -> "80+80 MHz"
+            else -> "Unknown"
+        }
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
