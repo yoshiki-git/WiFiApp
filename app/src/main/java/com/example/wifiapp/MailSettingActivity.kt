@@ -2,6 +2,7 @@ package com.example.wifiapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
@@ -41,6 +42,8 @@ class MailSettingActivity : AppCompatActivity() {
         binding.editMotoPass.setText(motopass)
         binding.editAtesakiAddress.setText(ateadd)
         binding.editSendInterval.setText(interval.toString())
+
+        val butn:Button = findViewById(R.id.btn_save_inputs)
 
 
 
