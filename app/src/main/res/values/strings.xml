@@ -5,4 +5,15 @@
     <string name="btn_ser_stop">ログ取得停止</string>
     <string name="tv_warning">Wifiと位置情報の設定をオンにしてください。
         \nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。</string>
+    <string name="btn_mailSetting">メール自動送信の設定</string>
+    <string name="tv_mailAddress">送信元メールアドレス</string>
+    <string name="tv_password">送信元メールアドレスパスワード</string>
+    <string name="tv_atesaki">送信先メールアドレス</string>
+    <string name="send_interval">メールの送信間隔</string>
+    <string name="send_file_info">送信ファイルの情報</string>
+    <string name="search_file">添付ファイルの検索</string>
+    <string name="minute">分</string>
+    <string name="btn_send_once">1回送信</string>
+    <string name="btn_send_repeat">繰り返し送信</string>
+    <string name="btn_save">入力値を保存</string>
 </resources>

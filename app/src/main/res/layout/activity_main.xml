@@ -34,6 +34,12 @@
             android:text="@string/wifi_scan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_mailSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_mailSetting"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginTop="5sp"
             android:id="@+id/recycler_view"
