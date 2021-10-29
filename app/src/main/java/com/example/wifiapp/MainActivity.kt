@@ -22,6 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
+import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -77,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         //ログ保存のボタン処理
         val btn_ser_start:Button = findViewById(R.id.ser_start)
         val btn_ser_stop : Button = findViewById(R.id.ser_stop)
+        val btn_mail_setting: Button = findViewById(R.id.btn_mailSetting)
 
         btn_ser_start.setOnClickListener {
             val intent = Intent(this,MyService::class.java)
@@ -89,6 +92,11 @@ class MainActivity : AppCompatActivity() {
             stopService(intent)
             btn_ser_stop.isEnabled = false
             btn_ser_start.isEnabled = true
+        }
+
+        btn_mail_setting.setOnClickListener {
+            val intent = Intent(this,MailSettingActivity::class.java)
+            startActivity(intent)
         }
 
 
