@@ -67,10 +67,10 @@ class MainActivity : AppCompatActivity() {
 
         //permissionチェック
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-            checkPermission(permissionsQ,REQUEST_CODE)
+            checkPermission(permissions,REQUEST_CODE)
             checkLogPermission()
         }else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q){
-            checkPermission(permissionsQ,REQUEST_CODE)
+            checkPermission(permissions,REQUEST_CODE)
         }else{
             checkPermission(permissions,REQUEST_CODE)
         }
@@ -132,6 +132,8 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = mAdapter
 
 
+
+        //アプリ起動時に自動でWifiスキャンをする
         wifiManager=context.getSystemService(Context.WIFI_SERVICE) as WifiManager
 
         val creScanResult=wifiManager.startScan()
