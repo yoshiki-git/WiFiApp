@@ -1,6 +1,9 @@
 package com.example.wifiapp
 
+import android.content.Context
+import android.widget.Toast
 import java.io.File
+import java.lang.Exception
 import java.util.*
 import javax.activation.DataHandler
 import javax.activation.FileDataSource
@@ -12,7 +15,7 @@ import javax.mail.internet.MimeMultipart
 import kotlin.concurrent.thread
 
 class SendMailService(val fromUsername:String,val password:String,val toAddress:String,val filePath:String,val fileName:String) {
-    fun sendOnce(){
+    fun sendOnce(context:Context){
         thread {
             val property = Properties()
             //SMTPを用いる IMAPとPOP3もいけるらしい
@@ -31,7 +34,7 @@ class SendMailService(val fromUsername:String,val password:String,val toAddress:
 
             //メール本文の追加
             val txtPart = MimeBodyPart()
-            txtPart.setText("メール本文です","utf-8")
+            txtPart.setText("メール本文","utf-8")
 
             //添付ファイルの追加
             val filePart = MimeBodyPart()
@@ -50,10 +53,9 @@ class SendMailService(val fromUsername:String,val password:String,val toAddress:
             message.setFrom(InternetAddress(fromUsername, "Fromの表示名です"))
             //送信先を引数に
             message.setRecipient(Message.RecipientType.TO, InternetAddress(toAddress, "Toの表示名です"))
-            message.subject = "メールタイトルです"
+            message.subject = "Wifiログアプリ自動送信メール"
        //     message.setText("こんにちは")
             message.setContent(mp)
-
             Transport.send(message)
         }
     }

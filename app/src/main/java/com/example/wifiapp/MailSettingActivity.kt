@@ -3,6 +3,7 @@ package com.example.wifiapp
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -14,6 +15,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import androidx.security.crypto.MasterKeys
 import com.example.wifiapp.databinding.ActivityMailSettingBinding
 import java.lang.Exception
 import java.net.URLDecoder
@@ -38,6 +40,10 @@ class MailSettingActivity : AppCompatActivity() {
             .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
             .build()
 
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
+
+        //Android9と10だとクラッシュする
+/*
         //EncryptedSharedPreferenceを使用する　セキュリティの観点のため
         val pref = EncryptedSharedPreferences.create(
             applicationContext,
@@ -46,6 +52,8 @@ class MailSettingActivity : AppCompatActivity() {
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
+
+ */
 
         //前回保存した値を読み出して表示する
         val motoadd = pref.getString("MOTOADD","non")
@@ -59,8 +67,10 @@ class MailSettingActivity : AppCompatActivity() {
         binding.editMotoPass.setText(motopass)
         binding.editAtesakiAddress.setText(ateadd)
         binding.editSendInterval.setText(interval.toString())
-        binding.editFilepath.setText(filePath.toString())
-        binding.editFileName.setText(fileName.toString())
+        binding.editFilepath.setText(filePath)
+        binding.editFileName.setText(fileName)
+
+
 
         binding.btnSearchFile.setOnClickListener {
             //添付ファイルを検索し、パスを保存する
@@ -85,25 +95,28 @@ class MailSettingActivity : AppCompatActivity() {
             Toast.makeText(this,"入力値を保存しました",Toast.LENGTH_SHORT).show()
         }
 
+
+
         binding.btnSendOnce.setOnClickListener {
             //1回だけメール送信
             val motoadd1 = binding.editMotoAdress.text.toString()
-            Log.d(TAG,motoadd1)
             val motopass1 = binding.editMotoPass.text.toString()
-            Log.d(TAG,motopass1)
             val ateadd1 = binding.editAtesakiAddress.text.toString()
-            Log.d(TAG,ateadd1)
             val filePath1 = binding.editFilepath.text.toString()
-            Log.d(TAG,filePath1)
             val fileName1 = binding.editFileName.text.toString()
-            Log.d(TAG,fileName1)
             val sendMailService = SendMailService(motoadd1,motopass1,ateadd1,filePath1,fileName1)
-            sendMailService.sendOnce()
+            sendMailService.sendOnce(applicationContext)
         }
 
         binding.btnSendRepeat.setOnClickListener {
             //指定間隔メール送信
-
+            val intent = Intent(this,RepeatMailService::class.java)
+            startForegroundService(intent)
+        }
+        binding.btnSendStop.setOnClickListener {
+            //指定間隔にメール送信を停止する
+            val intent = Intent(this,RepeatMailService::class.java)
+            stopService(intent)
         }
 
     }

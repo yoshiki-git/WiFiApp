@@ -99,6 +99,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15sp"
             android:text="@string/btn_send_repeat"/>
+        <Button
+            android:id="@+id/btn_send_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15sp"
+            android:text="送信を停止"/>
 
     </LinearLayout>
 
