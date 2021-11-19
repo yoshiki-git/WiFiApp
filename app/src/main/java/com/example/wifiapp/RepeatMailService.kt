@@ -44,7 +44,7 @@ class RepeatMailService : Service() {
 
         Log.d(TAG,interval.toString())
         //    val context = applicationContext
-        val channelId = "default"
+        val channelId = "RepeatMail"
         val title = context.getString(R.string.app_name)
 
         val pendingIntent = PendingIntent.getActivity(

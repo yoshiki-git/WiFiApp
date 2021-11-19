@@ -88,7 +88,7 @@ class MyService : Service() {
 
         val requestCode = intent!!.getIntExtra("REQUEST_CODE", 0)
         //    val context = applicationContext
-        val channelId = "default"
+        val channelId = "RepeatWifiScan"
         val title = context.getString(R.string.app_name)
 
         val pendingIntent = PendingIntent.getActivity(
@@ -104,7 +104,7 @@ class MyService : Service() {
 
         // Notification　Channel 設定
         val channel = NotificationChannel(
-            channelId, title, NotificationManager.IMPORTANCE_DEFAULT
+            channelId, title, NotificationManager.IMPORTANCE_LOW
         )
 
         notificationManager.createNotificationChannel(channel)
