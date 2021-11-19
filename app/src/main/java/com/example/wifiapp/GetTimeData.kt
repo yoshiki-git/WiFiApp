@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class GetTimeData {
-    val TAG="TestApp"
+    val TAG="GetTimeData"
 
     //時刻取得　表示用日付有り
     fun getNowDate():String{

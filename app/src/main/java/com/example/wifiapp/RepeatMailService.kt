@@ -7,11 +7,15 @@ import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import androidx.preference.PreferenceManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RepeatMailService : Service() {
 
     private lateinit var context: Context
-    val TAG = "RepeatMailService"
+    val TAG = "RepeatMailService.kt"
     private var interval:Int = 0
     private lateinit var motoadd:String
     private lateinit var motopass:String
@@ -78,11 +82,23 @@ class RepeatMailService : Service() {
 
         //intervalが不正な値の場合はメール送信を行わない
         if (interval>1) {
+            GlobalScope.launch {
+                //毎回Alarmの設定 interval分毎に繰り返しを設定
+                setNextAlarmService(context,interval)
+                val sendMailService = SendMailService(motoadd,motopass,ateadd,filePath,fileName)
+                val message = sendMailService.sendOnce().await()
+                withContext(Dispatchers.Main){
+                    Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            /*
             //毎回Alarmの設定 interval分毎に繰り返しを設定
             setNextAlarmService(context,interval)
             val sendMailService = SendMailService(motoadd,motopass,ateadd,filePath,fileName)
-            sendMailService.sendOnce(context)
+            sendMailService.sendOnce()
             Log.d(TAG,"メール送信")
+             */
         }else{
             Toast.makeText(context,"送信間隔の値が不正です",Toast.LENGTH_SHORT).show()
             stopSelf()

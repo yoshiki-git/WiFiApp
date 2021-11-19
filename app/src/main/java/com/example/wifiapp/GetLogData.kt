@@ -12,7 +12,7 @@ import java.lang.StringBuilder
 import java.nio.charset.StandardCharsets
 
 class GetLogData(val context: Context) {
-    val TAG="TestApp"
+    val TAG="GetLogData.kt"
 
 
     fun getFileStatus(fileName:String): File {

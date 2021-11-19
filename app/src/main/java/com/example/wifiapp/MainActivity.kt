@@ -27,11 +27,11 @@ import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
-    //やること　定期処理の音を消す　Android11でBGでスキャンするようにする　複数人にメール送信　送信エラーでアプリ落ちないようにする
+    //やること 複数人にメール送信　送信エラーでアプリ落ちないようにする
     //Wifiスキャン条件
-    //Wifiオン、位置情報オン、画面点灯、2分につき4回までの制限がある
+    //Wifiオン、位置情報オン、画面点灯、2分につき4回までの制限がある BackGroundだと制限が30分に1回になる
     private val REQUEST_CODE : Int = 1000
-    private val TAG ="appMainActivity"
+    private val TAG ="MainActivity.kt"
     private val permissions = arrayOf(
             android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION,

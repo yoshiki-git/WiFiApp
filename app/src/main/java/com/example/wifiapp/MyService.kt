@@ -1,8 +1,10 @@
 package com.example.wifiapp
 
 import android.app.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
@@ -12,7 +14,7 @@ import android.widget.Toast
 import java.io.File
 
 class MyService : Service() {
-    val TAG = "AppService"
+    val TAG = "MyService.kt"
 
     private lateinit var context: Context
     private lateinit var getLogData: GetLogData
@@ -21,6 +23,8 @@ class MyService : Service() {
     lateinit var wifiManager: WifiManager
     //Wifimanager.WifiInfoの方
     lateinit var wifi_info:WifiInfo
+
+   // lateinit var mWifiReceiver: WifiScanReceiver
 
 
     override fun onCreate() {
@@ -54,32 +58,27 @@ class MyService : Service() {
         columns.add("frequency")
         columns.add("ChannelBandWidth")
         getLogData.getColumn(file,columns)
-/*
-        val wifiScanReceiver = object : BroadcastReceiver(){
 
-            override fun onReceive(context: Context, intent: Intent) {
-                val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
-                if (success) {
-                    scanSuccess()
-                } else {
-                    scanFailure()
-                }
-            }
-        }
-
+        /*
         val intentFilter = IntentFilter()
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        context.registerReceiver(wifiScanReceiver, intentFilter)
-        */
+        mWifiReceiver = WifiScanReceiver()
+        context.registerReceiver(mWifiReceiver, intentFilter)
+
+         */
+
 
     }
 
 
 
     override fun onDestroy() {
+        Log.d(TAG,"onDestroy")
         super.onDestroy()
         //アラームの終了
         stopAlarmService()
+
+      //  context.unregisterReceiver(mWifiReceiver)
         //サービス終了
         stopSelf()
     }
@@ -103,6 +102,7 @@ class MyService : Service() {
 
 
         // Notification　Channel 設定
+        //IMPORTANCE_LOWにして通知音を消している
         val channel = NotificationChannel(
             channelId, title, NotificationManager.IMPORTANCE_LOW
         )
@@ -121,12 +121,15 @@ class MyService : Service() {
         startForeground(9999, notification)
 
         val success = wifiManager.startScan()
+
         if (success) {
             // scan failure handling
             scanSuccess()
         }else{
             scanFailure()
         }
+
+
 
         //毎回Alarmの設定
         setNextAlarmService(context)
@@ -135,6 +138,22 @@ class MyService : Service() {
         //return START_STICKY;
         return START_REDELIVER_INTENT
     }
+
+    inner class WifiScanReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.d(TAG,"SCAN_RESULT_AVAILABLE_ACTION is Received")
+            val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+            if (success) {
+                scanSuccess()
+            } else {
+                scanFailure()
+            }
+        }
+    }
+
+
+
     // 次のアラームの設定
     private fun setNextAlarmService(context: Context) {
 
@@ -165,9 +184,10 @@ class MyService : Service() {
 
         //スキャン結果の受け取り
         val results:List<ScanResult> = wifiManager.scanResults
+     //   Log.d(TAG,results.toString())
 
         //スキャン成功時にトーストで通知
-        Toast.makeText(this,"wifi scan 成功", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context,"wifi scan 成功", Toast.LENGTH_SHORT).show()
         //ログデータ用に時刻を取得
         val time=getTimeData.getNowTime()
         //現在接続しているWifiの情報を取得する
@@ -242,7 +262,7 @@ class MyService : Service() {
         // consider using old scan results: these are the OLD results!
         //Doze中、画面消灯時にはWifiスキャンは失敗する
         //位置情報オフでも失敗する
-        Toast.makeText(this,"wifi scan 失敗", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context,"wifi scan 失敗", Toast.LENGTH_SHORT).show()
         val stringBuilder = StringBuilder()
         stringBuilder.append(getTimeData.getNowTime())
                      .append(",")

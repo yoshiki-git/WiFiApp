@@ -17,12 +17,16 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import androidx.security.crypto.MasterKeys
 import com.example.wifiapp.databinding.ActivityMailSettingBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.net.URLDecoder
 
 class MailSettingActivity : AppCompatActivity() {
 
-    val TAG = "メールアクティビティ"
+    val TAG = "MailSettingActivity.kt"
     val READ_REQUEST_CODE:Int = 9999
 
     companion object{
@@ -104,8 +108,14 @@ class MailSettingActivity : AppCompatActivity() {
             val ateadd1 = binding.editAtesakiAddress.text.toString()
             val filePath1 = binding.editFilepath.text.toString()
             val fileName1 = binding.editFileName.text.toString()
-            val sendMailService = SendMailService(motoadd1,motopass1,ateadd1,filePath1,fileName1)
-            sendMailService.sendOnce(applicationContext)
+            GlobalScope.launch {
+                val sendMailService = SendMailService(motoadd1,motopass1,ateadd1,filePath1,fileName1)
+                val message = sendMailService.sendOnce().await()
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@MailSettingActivity,message,Toast.LENGTH_SHORT).show()
+                }
+
+            }
         }
 
         binding.btnSendRepeat.setOnClickListener {
