@@ -11,6 +11,8 @@ import android.net.wifi.WifiManager
 import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
+import androidx.preference.Preference
+import androidx.preference.PreferenceManager
 import java.io.File
 
 class MyService : Service() {
@@ -24,6 +26,8 @@ class MyService : Service() {
     //Wifimanager.WifiInfoの方
     lateinit var wifi_info:WifiInfo
 
+    private var checkBoxStatus : Boolean = false
+
    // lateinit var mWifiReceiver: WifiScanReceiver
 
 
@@ -35,6 +39,10 @@ class MyService : Service() {
         context=applicationContext
         //getLogData生成
         getLogData= GetLogData(context)
+
+        //チェックボックスの設定値呼び出し
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        checkBoxStatus = pref.getBoolean("checkStatus",false)
 
         //ファイル名を現在時刻に設定する
         val start_time=getTimeData.getFileName()
@@ -85,6 +93,8 @@ class MyService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+        Log.d(TAG,"onStartCommand")
+
         val requestCode = intent!!.getIntExtra("REQUEST_CODE", 0)
         //    val context = applicationContext
         val channelId = "RepeatWifiScan"
@@ -120,14 +130,46 @@ class MyService : Service() {
         // startForeground 第一引数のidで通知を識別
         startForeground(9999, notification)
 
-        val success = wifiManager.startScan()
+        //ログの時刻指定のオンオフで処理を切り替える
 
-        if (success) {
-            // scan failure handling
-            scanSuccess()
-        }else{
-            scanFailure()
+        //オンの時
+        if (checkBoxStatus){
+            Log.d(TAG,"CheckBox is true")
+            //9時を過ぎてるかをチェック
+            val isBefore9 = getTimeData.compareTime(20,0)
+            val isBefore18 = getTimeData.compareTime(21,0)
+
+            if (!isBefore9 && isBefore18){
+                Log.d(TAG,"間だよ")
+                val success = wifiManager.startScan()
+
+                if (success) {
+                    // scan failure handling
+                    scanSuccess()
+                }else{
+                    scanFailure()
+                }
+            }else{
+                Log.d(TAG,"間じゃないよ")
+            }
         }
+        //オフの時
+        else{
+            Log.d(TAG,"CheckBox is false")
+            val success = wifiManager.startScan()
+
+            if (success) {
+                // scan failure handling
+                scanSuccess()
+            }else{
+                scanFailure()
+            }
+        }
+
+
+
+
+
 
 
 
@@ -157,6 +199,9 @@ class MyService : Service() {
     // 次のアラームの設定
     private fun setNextAlarmService(context: Context) {
 
+        //チェックボックスの設定値呼び出し
+        val pref = PreferenceManager.getDefaultSharedPreferences(context)
+        checkBoxStatus = pref.getBoolean("checkStatus",false)
         // 30s毎のアラーム設定
         val repeatPeriod = (30 * 1000).toLong()
         val intent = Intent(context, MyService::class.java)
@@ -170,8 +215,8 @@ class MyService : Service() {
     }
 
     private fun stopAlarmService() {
-        val indent = Intent(context, MyService::class.java)
-        val pendingIntent = PendingIntent.getService(context, 0, indent, 0)
+        val intent = Intent(context, MyService::class.java)
+        val pendingIntent = PendingIntent.getService(context, 0, intent, 0)
 
         // アラームを解除する
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager

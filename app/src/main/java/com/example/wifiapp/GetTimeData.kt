@@ -3,6 +3,7 @@ package com.example.wifiapp
 import android.util.Log
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.*
 
 class GetTimeData {
@@ -27,6 +28,13 @@ class GetTimeData {
         val df: DateFormat = SimpleDateFormat("yyyyMMddHHmmss")
         val date = Date(System.currentTimeMillis())
         return df.format(date)
+    }
+
+    fun compareTime(hour:Int,minute:Int) : Boolean{
+        val nowTime : LocalTime = LocalTime.now()
+        val date1 : LocalTime = LocalTime.of(hour,minute)
+
+        return nowTime.isBefore(date1)
     }
 
     //経過時間を取得する関数

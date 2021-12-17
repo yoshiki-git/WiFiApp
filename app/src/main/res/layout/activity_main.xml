@@ -1,50 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wifiと位置情報の設定をオンにしてください。\nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。 " />
+    <CheckBox
+        android:id="@+id/timerCheckBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/background_light"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Wifiと位置情報の設定をオンにしてください。\nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。 "/>
-
-               <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
-                    android:orientation="horizontal">
-                    <Button
-                        android:layout_width="180sp"
-                        android:layout_height="wrap_content"
-                        android:enabled="true"
-                        android:id="@+id/ser_start"
-                        android:text="@string/btn_ser_start"/>
-                    <Button
-                        android:layout_width="180sp"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:layout_marginStart="10sp"
-                        android:id="@+id/ser_stop"
-                        android:text="@string/btn_ser_stop"/>
-               </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:text="@string/checkbox_timer"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10sp"
+        android:orientation="horizontal">
         <Button
-            android:id="@+id/btn_wifi_scan"
-            android:text="@string/wifi_scan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/ser_start"
+            android:layout_width="180sp"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:text="@string/btn_ser_start" />
+
+        <Button
+            android:id="@+id/ser_stop"
+            android:layout_width="180sp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:enabled="false"
+            android:text="@string/btn_ser_stop" />
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/btn_wifi_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wifi_scan" />
+
     <Button
         android:id="@+id/btn_mailSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_mailSetting"/>
+        android:text="@string/btn_mailSetting" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_marginTop="5sp"
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
- </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5sp" />
+</LinearLayout>
 
 

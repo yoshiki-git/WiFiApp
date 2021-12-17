@@ -3,6 +3,7 @@ package com.example.wifiapp
 import android.R.attr.button
 import android.annotation.TargetApi
 import android.app.ActivityManager
+import android.app.AlarmManager
 import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -14,16 +15,21 @@ import android.provider.Settings
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.io.File
 import java.lang.Exception
+import java.time.LocalTime
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -81,6 +87,20 @@ class MainActivity : AppCompatActivity() {
         val btn_ser_start:Button = findViewById(R.id.ser_start)
         val btn_ser_stop : Button = findViewById(R.id.ser_stop)
         val btn_mail_setting: Button = findViewById(R.id.btn_mailSetting)
+
+        val pref = PreferenceManager.getDefaultSharedPreferences(this)
+        val checkStatus = pref.getBoolean("checkStatus",false)
+
+        //チェックボックス登録
+        val checkBox : CheckBox = findViewById(R.id.timerCheckBox)
+        checkBox.isChecked = checkStatus
+
+        checkBox.setOnClickListener {
+            pref.edit {
+                putBoolean("checkStatus",checkBox.isChecked)
+                Log.d(TAG,"CheckStatus:"+checkBox.isChecked)
+            }
+        }
 
         btn_ser_start.setOnClickListener {
             val intent = Intent(this,MyService::class.java)
