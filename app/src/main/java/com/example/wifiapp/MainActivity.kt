@@ -102,12 +102,32 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+
         btn_ser_start.setOnClickListener {
             val intent = Intent(this,MyService::class.java)
             startForegroundService(intent)
             btn_ser_start.isEnabled = false
             btn_ser_stop.isEnabled = true
         }
+
+
+        /*
+        btn_ser_start.setOnClickListener {
+            val getLogData = GetLogData(this)
+            val getTimeData = GetTimeData()
+            val file = getLogData.getFileStatus(getTimeData.getFileName()+".csv")
+
+            val logData = "11:33:44,75498639717,Buffalo-A-B77E-4,c4:3c:ea:68:24:9e,false,N/A,N/A,[WPA-PSK-TKIP+CCMP][WPA2-PSK-TKIP+CCMP][RSN-PSK-TKIP+CCMP][ESS],-65,5180,80MHz\n"
+
+            for (i in 0..1000003){
+                Log.d(TAG,"現在${i}回目")
+                getLogData.getLog(file,logData)
+            }
+
+        }
+
+         */
+
         btn_ser_stop.setOnClickListener {
             val intent = Intent(this,MyService::class.java)
             stopService(intent)
