@@ -13,6 +13,9 @@ import android.net.wifi.WifiManager
 import android.os.*
 import android.provider.Settings
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.CheckBox
@@ -26,6 +29,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 import java.lang.Exception
 import java.time.LocalTime
@@ -65,6 +69,31 @@ class MainActivity : AppCompatActivity() {
     lateinit var mAdapter: CustomAdapter
     var  mWifiList = mutableListOf<Wifi_Info>()
 
+    //オプションメニュー追加
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.option_menu_list,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val itemId = item.itemId
+
+        when(itemId){
+            R.id.option_menu_1 -> {
+                val intent = Intent(this,MailSettingActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.option_menu_2 -> {
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -86,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         //ログ保存のボタン処理
         val btn_ser_start:Button = findViewById(R.id.ser_start)
         val btn_ser_stop : Button = findViewById(R.id.ser_stop)
-        val btn_mail_setting: Button = findViewById(R.id.btn_mailSetting)
+     //   val btn_mail_setting: Button = findViewById(R.id.btn_mailSetting)
 
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
         val checkStatus = pref.getBoolean("checkStatus",false)
@@ -134,11 +163,13 @@ class MainActivity : AppCompatActivity() {
             btn_ser_stop.isEnabled = false
             btn_ser_start.isEnabled = true
         }
-
+/*
         btn_mail_setting.setOnClickListener {
             val intent = Intent(this,MailSettingActivity::class.java)
             startActivity(intent)
         }
+
+ */
 
 
         context=applicationContext
@@ -193,8 +224,9 @@ class MainActivity : AppCompatActivity() {
 
  */
 
+
         //Wifiビューの更新ボタン
-        val wifi_scan: Button =findViewById(R.id.btn_wifi_scan)
+        val wifi_scan: FloatingActionButton =findViewById(R.id.btn_wifi_scan)
         wifi_scan.setOnClickListener {
             //ボタンの連打防止処理　2秒使えないようにする
             wifi_scan.isEnabled = false
@@ -208,6 +240,8 @@ class MainActivity : AppCompatActivity() {
             }
 
 
+
+
             val scan_judgement=wifiManager.startScan()
             if (scan_judgement){
                 //スキャン成功時にトーストで通知
@@ -219,7 +253,14 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG,"wifi scan failed")
             }
         }
+
+
+
+
+
     }
+
+
 
     fun scanSuccess(){
         mWifiList.clear()
@@ -259,6 +300,7 @@ class MainActivity : AppCompatActivity() {
         mAdapter = CustomAdapter(mWifiList)
         recyclerView.adapter = mAdapter
     }
+
 
     fun firstScanFailure(){
         //テキトーなデータ

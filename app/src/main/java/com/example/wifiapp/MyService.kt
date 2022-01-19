@@ -9,6 +9,7 @@ import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.IBinder
+import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.preference.Preference
@@ -136,8 +137,8 @@ class MyService : Service() {
         if (checkBoxStatus){
             Log.d(TAG,"CheckBox is true")
             //9時を過ぎてるかをチェック
-            val isBefore9 = getTimeData.compareTime(20,0)
-            val isBefore18 = getTimeData.compareTime(21,0)
+            val isBefore9 = getTimeData.compareTime(9,0)
+            val isBefore18 = getTimeData.compareTime(18,0)
 
             if (!isBefore9 && isBefore18){
                 Log.d(TAG,"間だよ")
@@ -205,6 +206,7 @@ class MyService : Service() {
         // 30s毎のアラーム設定
         val repeatPeriod = (30 * 1000).toLong()
         val intent = Intent(context, MyService::class.java)
+    //    val startMillis = SystemClock.elapsedRealtime() + repeatPeriod
         val startMillis = System.currentTimeMillis() + repeatPeriod
         val pendingIntent = PendingIntent.getService(context, 0, intent, 0)
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
