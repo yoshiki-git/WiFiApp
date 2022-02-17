@@ -5,7 +5,7 @@
     <string name="btn_ser_stop">ログ取得停止</string>
     <string name="tv_warning">Wifiと位置情報の設定をオンにしてください。
         \nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。</string>
-    <string name="btn_mailSetting">メール自動送信の設定</string>
+    <string name="btn_mailSetting">設定</string>
     <string name="tv_mailAddress">送信元メールアドレス</string>
     <string name="tv_password">送信元メールアドレスパスワード</string>
     <string name="tv_atesaki">送信先メールアドレス</string>
@@ -19,4 +19,8 @@
     <string name="bs_dialog_message">アプリを終了しますか</string>
     <string name="bs_dialog_yes">はい</string>
     <string name="bs_dialog_no">いいえ</string>
+    <string name="checkbox_timer">ログ取得する時間を指定する</string>
+    <string name="op_menu1">メール設定</string>
+    <string name="op_menu2">タイマー設定</string>
+    <string name="tv_attention">Wifiと位置情報の設定をオンにしてください。\nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。</string>
 </resources>

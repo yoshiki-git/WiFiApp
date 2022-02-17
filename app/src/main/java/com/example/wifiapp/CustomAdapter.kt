@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class CustomAdapter(private val wifi_list :List<Wifi_Info>):RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
-    private val TAG = "CustomAdapter"
+    private val TAG = "CustomAdapter.kt"
 
     // Viewの初期化
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
