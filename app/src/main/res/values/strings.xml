@@ -23,4 +23,6 @@
     <string name="op_menu1">メール設定</string>
     <string name="op_menu2">タイマー設定</string>
     <string name="tv_attention">Wifiと位置情報の設定をオンにしてください。\nWifiスキャンを行うために、アプリを開いている時は画面を常時点灯するように設定してあります。</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

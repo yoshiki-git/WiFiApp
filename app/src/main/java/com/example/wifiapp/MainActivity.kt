@@ -29,6 +29,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 import java.lang.Exception
@@ -110,6 +111,11 @@ class MainActivity : AppCompatActivity() {
         }else{
             checkPermission(permissions,REQUEST_CODE)
         }
+
+        //ViewPagerの設定
+        val viewPager2 :ViewPager2 = findViewById(R.id.pager)
+        val pagerAdapter = SectionPagerAdapter(this)
+        viewPager2.adapter = pagerAdapter
 
 
         //ログ保存のボタン処理
