@@ -95,7 +95,7 @@ class SecondFragment : Fragment() {
         bluetoothAdapter?.startDiscovery()
         Log.d(TAG,"register receiver")
 
-        Toast.makeText(context,"Bluetoothスキャン中",Toast.LENGTH_SHORT).show()
+     //   Toast.makeText(context,"Bluetoothスキャン中",Toast.LENGTH_SHORT).show()
      //   Thread.sleep(2000)
     //    bluetoothAdapter?.cancelDiscovery()
 
@@ -127,6 +127,7 @@ class SecondFragment : Fragment() {
                         }
                         val deviceHardwareAddress = device.address // MAC address
                         val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
+                        //接続状態だが、なぜか接続中であるBONDINGを返さない
                         val bondState = device.bondState.let { getDeviceData.getBondState(it) }
                       //  val deviceType = device.bluetoothClass?.deviceClass?.let { getDeviceData.getDeviceType(it) }
                         val deviceType = if(device.bluetoothClass != null){

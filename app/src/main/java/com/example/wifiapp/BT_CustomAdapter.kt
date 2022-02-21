@@ -46,7 +46,7 @@ class BT_CustomAdapter(private val bt_list :List<BT_List>):RecyclerView.Adapter<
         val deviceType = bt.deviceType
         val deviceConType = bt.deviceConType
 
-        viewHolder.bt_image.setImageResource(R.drawable.wifi)
+        viewHolder.bt_image.setImageResource(R.drawable.bluetooth)
         viewHolder.bt_textview1.text = "Name:$name $bondState RSSI:$rssi"
         viewHolder.bt_textview2.text = "Type:$deviceType Tech:$deviceConType"
         viewHolder.bt_textview3.text = "MAC Address:$macAddress"

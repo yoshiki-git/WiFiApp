@@ -1,6 +1,8 @@
 package com.example.wifiapp
 
 import android.app.*
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -66,6 +68,13 @@ class MyService : Service() {
         columns.add("level")
         columns.add("frequency")
         columns.add("ChannelBandWidth")
+        //ここからBluetooth情報
+        columns.add("Bt_Name")
+        columns.add("Bt_MACAddress")
+        columns.add("Bt_RSSI")
+        columns.add("Bt_BOND_STATUS")
+        columns.add("Bt_Type")
+        columns.add("Bt_Tech")
         getLogData.getColumn(file,columns)
 
         /*
@@ -84,6 +93,8 @@ class MyService : Service() {
     override fun onDestroy() {
         Log.d(TAG,"onDestroy")
         super.onDestroy()
+        //Bluetoothレシーバーの解除
+        context.unregisterReceiver(btLogReceiver)
         //アラームの終了
         stopAlarmService()
 
@@ -167,11 +178,15 @@ class MyService : Service() {
             }
         }
 
+        //Bluetooth情報の取得
+        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
+        // Register for broadcasts when a device is discovered.
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+        context.registerReceiver(btLogReceiver, filter)
 
-
-
-
+        bluetoothAdapter?.startDiscovery()
+        Log.d(TAG,"register receiver")
 
 
         //毎回Alarmの設定
@@ -295,6 +310,7 @@ class MyService : Service() {
                 .append(i.frequency)
                 .append(",")
                 .append(channelWidthToString(i.channelWidth))
+                .append(",,,,,,")
                 .append("\n")
             getLogData.getLog(file,stringBuilder.toString())
 
@@ -322,13 +338,84 @@ class MyService : Service() {
 
     fun channelWidthToString(i:Int) =
         when(i){
-            0 -> "20MHz"
-            1 -> "40MHz"
-            2 -> "80MHz"
-            3 -> "160MHz"
-            4 -> "80+80 MHz"
+            0 -> "20"
+            1 -> "40"
+            2 -> "80"
+            3 -> "160"
+            4 -> "80+80"
             else -> "Unknown"
         }
+
+    // Create a BroadcastReceiver for ACTION_FOUND.
+    private val btLogReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            val action: String? = intent.action
+
+            val sb = StringBuilder()
+
+            val time = getTimeData.getNowTime()
+
+            sb.append(time)
+                .append(",,,,,,,,,,,")
+
+            when(action) {
+                BluetoothDevice.ACTION_FOUND -> {
+                    // Discovery has found a device. Get the BluetoothDevice
+                    // object and its info from the Intent.
+                    Log.d(TAG,"ACTION_FOUND is received")
+                    val device: BluetoothDevice? =
+                        intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+
+                    val getDeviceData:GetDeviceData = GetDeviceData(context)
+
+                    if (device!=null){
+                        val deviceName = if (device.name != null){
+                            device.name
+                        }else{
+                            "null"
+                        }
+                        val deviceHardwareAddress = device.address // MAC address
+                        val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
+                        //接続状態だが、なぜか接続中であるBONDINGを返さない
+                        val bondState = device.bondState.let { getDeviceData.getBondState(it) }
+                        //  val deviceType = device.bluetoothClass?.deviceClass?.let { getDeviceData.getDeviceType(it) }
+                        val deviceType = if(device.bluetoothClass != null){
+                            device.bluetoothClass.deviceClass.let { getDeviceData.getDeviceType(it) }
+                        }else{
+                            "null"
+                        }
+                        val deviceConType = device.type.let { getDeviceData.getDeviceConnectType(it) }
+
+                        sb.append(deviceName)
+                            .append(",")
+                            .append(deviceHardwareAddress)
+                            .append(",")
+                            .append(rssi)
+                            .append(",")
+                            .append(bondState)
+                            .append(",")
+                            .append(deviceType)
+                            .append(",")
+                            .append(deviceConType)
+                            .append(",")
+                            .append("\n")
+
+                        getLogData.getLog(file,sb.toString())
+                        Log.d(TAG,"Name:$deviceName")
+                        Log.d(TAG,"hardwareAddress:$deviceHardwareAddress")
+                        //      Log.d(TAG,"BT:bondState:${device?.bondState}")
+                        //      Log.d(TAG,"BT:type:${device?.type}")
+                        Log.d(TAG,"BT:deviceClass:${device?.bluetoothClass?.deviceClass}")
+                        //      Log.d(TAG,"BT_RSSI:$rssi")
+                    }else{
+                        Toast.makeText(context,"何もスキャンされませんでした",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
+        }
+    }
 
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
