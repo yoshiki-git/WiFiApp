@@ -7,7 +7,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class SectionPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    override fun getItemCount(): Int = 100
+    //スワイプビューのページ数
+    override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment =
         when(position) {

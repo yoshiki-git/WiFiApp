@@ -4,6 +4,8 @@ import android.R.attr.button
 import android.annotation.TargetApi
 import android.app.ActivityManager
 import android.app.AlarmManager
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -165,20 +167,6 @@ class MainActivity : AppCompatActivity() {
         }
 
  */
-
-
-        context=applicationContext
-
-
-
-        //Wifiビューの更新ボタン
-        val wifi_scan: FloatingActionButton =findViewById(R.id.btn_wifi_scan)
-        wifi_scan.setOnClickListener {
-            //ボタンの連打防止処理　2秒使えないようにする
-            wifi_scan.isEnabled = false
-            Handler().postDelayed({ wifi_scan.isEnabled = true }, 2000L)
-        }
-
     }
 
 
