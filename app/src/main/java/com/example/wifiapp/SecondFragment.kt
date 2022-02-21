@@ -125,7 +125,7 @@ class SecondFragment : Fragment() {
                         }else{
                             "null"
                         }
-                        val deviceHardwareAddress = device.address // MAC address
+                        val deviceHardwareAddress = device.address // Bluetooth Hardware address
                         val rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
                         //接続状態だが、なぜか接続中であるBONDINGを返さない
                         val bondState = device.bondState.let { getDeviceData.getBondState(it) }

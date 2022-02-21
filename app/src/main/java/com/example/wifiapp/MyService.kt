@@ -70,7 +70,7 @@ class MyService : Service() {
         columns.add("ChannelBandWidth")
         //ここからBluetooth情報
         columns.add("Bt_Name")
-        columns.add("Bt_MACAddress")
+        columns.add("Bt_HWAddress")
         columns.add("Bt_RSSI")
         columns.add("Bt_BOND_STATUS")
         columns.add("Bt_Type")

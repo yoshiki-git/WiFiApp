@@ -16,7 +16,7 @@ class BT_CustomAdapter(private val bt_list :List<BT_List>):RecyclerView.Adapter<
         val bt_image: ImageView
         val bt_textview1: TextView  //デバイス名　rssi txpower
         val bt_textview2: TextView  //デバイスタイプ　ベンダー名　通信方式
-        val bt_textview3: TextView  //MACアドレス
+        val bt_textview3: TextView  //Hardwareアドレス
         init {
             bt_image = view.findViewById(R.id.bt_imageView)
             bt_textview1 = view.findViewById(R.id.bt_textview1)
@@ -40,7 +40,7 @@ class BT_CustomAdapter(private val bt_list :List<BT_List>):RecyclerView.Adapter<
         }else{
             "null"
         }
-        val macAddress = bt.MAC_Address
+        val macAddress = bt.Hardware_Address
         val rssi = bt.rssi
         val bondState = bt.bondState
         val deviceType = bt.deviceType
@@ -49,7 +49,7 @@ class BT_CustomAdapter(private val bt_list :List<BT_List>):RecyclerView.Adapter<
         viewHolder.bt_image.setImageResource(R.drawable.bluetooth)
         viewHolder.bt_textview1.text = "Name:$name $bondState RSSI:$rssi"
         viewHolder.bt_textview2.text = "Type:$deviceType Tech:$deviceConType"
-        viewHolder.bt_textview3.text = "MAC Address:$macAddress"
+        viewHolder.bt_textview3.text = "Bluetooth Hardware Address:$macAddress"
     }
 
     // 表示数を返す
