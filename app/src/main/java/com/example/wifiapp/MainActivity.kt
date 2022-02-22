@@ -1,17 +1,9 @@
 package com.example.wifiapp
 
-import android.R.attr.button
 import android.annotation.TargetApi
-import android.app.ActivityManager
-import android.app.AlarmManager
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.content.*
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.net.wifi.ScanResult
-import android.net.wifi.WifiInfo
-import android.net.wifi.WifiManager
 import android.os.*
 import android.provider.Settings
 import android.util.Log
@@ -23,19 +15,11 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.io.File
-import java.lang.Exception
-import java.time.LocalTime
 import java.util.*
 
 
@@ -78,7 +62,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.option_menu_2 -> {
-
+            }
+            R.id.option_menu_3->{
+                val intent = Intent(this,LogItemSettingActivity::class.java)
+                startActivity(intent)
             }
         }
 

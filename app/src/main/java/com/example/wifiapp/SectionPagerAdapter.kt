@@ -8,7 +8,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class SectionPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
     //スワイプビューのページ数
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment =
         when(position) {
@@ -17,6 +17,9 @@ class SectionPagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAda
             }
             1 -> {
                 SecondFragment()
+            }
+            2 -> {
+                ThirdFragment()
             }
             else -> {
                 MainFragment()

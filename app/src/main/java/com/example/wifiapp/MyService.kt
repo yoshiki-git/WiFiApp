@@ -82,10 +82,7 @@ class MyService : Service() {
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
         mWifiReceiver = WifiScanReceiver()
         context.registerReceiver(mWifiReceiver, intentFilter)
-
          */
-
-
     }
 
 
