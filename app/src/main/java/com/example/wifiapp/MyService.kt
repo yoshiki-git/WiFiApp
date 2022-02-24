@@ -30,8 +30,12 @@ class MyService : Service() {
     lateinit var wifi_info:WifiInfo
 
     private var checkBoxStatus : Boolean = false
+    private var isGetWifiLog:Boolean = true
+    private var isGetBTLog: Boolean = false
+    private var isGetBLELog: Boolean = false
 
    // lateinit var mWifiReceiver: WifiScanReceiver
+  //  private var btLogReceiver: BroadcastReceiver? = null
 
 
     override fun onCreate() {
@@ -46,6 +50,21 @@ class MyService : Service() {
         //チェックボックスの設定値呼び出し
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         checkBoxStatus = pref.getBoolean("checkStatus",false)
+        //Wifiを取るかの設定
+        isGetWifiLog = pref.getBoolean(
+            context.resources.getString(R.string.settings_wifi_key),
+            context.resources.getBoolean(R.bool.settings_wifi_default)
+        )
+        //Bluetoothを取るかの設定
+        isGetBTLog = pref.getBoolean(
+            context.resources.getString(R.string.settings_bt_key),
+            context.resources.getBoolean(R.bool.settings_bt_default)
+        )
+        //BLEを取るかの設定
+        isGetBLELog = pref.getBoolean(
+            context.resources.getString(R.string.settings_ble_key),
+            context.resources.getBoolean(R.bool.settings_ble_default)
+        )
 
         //ファイル名を現在時刻に設定する
         val start_time=getTimeData.getFileName()
@@ -90,12 +109,13 @@ class MyService : Service() {
     override fun onDestroy() {
         Log.d(TAG,"onDestroy")
         super.onDestroy()
-        //Bluetoothレシーバーの解除
-        context.unregisterReceiver(btLogReceiver)
+
         //アラームの終了
         stopAlarmService()
 
       //  context.unregisterReceiver(mWifiReceiver)
+        //現状クラッシュするのでコメントアウト
+      //  context.unregisterReceiver(BtLogReceiver)
         //サービス終了
         stopSelf()
     }
@@ -165,26 +185,37 @@ class MyService : Service() {
         //オフの時
         else{
             Log.d(TAG,"CheckBox is false")
-            val success = wifiManager.startScan()
 
-            if (success) {
-                // scan failure handling
-                scanSuccess()
-            }else{
-                scanFailure()
+            //Wifiを取るかの設定を参照
+            if (isGetWifiLog){
+                val success = wifiManager.startScan()
+
+                if (success) {
+                    // scan failure handling
+                    scanSuccess()
+                }else{
+                    scanFailure()
+                }
             }
+            //Bluetoothを取るかの設定を参照
+            if(isGetBTLog){
+                //Bluetooth情報の取得
+                val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+
+                // Register for broadcasts when a device is discovered.
+                val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+
+
+                context.registerReceiver(BtLogReceiver, filter)
+
+
+
+
+                bluetoothAdapter?.startDiscovery()
+                Log.d(TAG,"register receiver")
+            }
+
         }
-
-        //Bluetooth情報の取得
-        val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-
-        // Register for broadcasts when a device is discovered.
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        context.registerReceiver(btLogReceiver, filter)
-
-        bluetoothAdapter?.startDiscovery()
-        Log.d(TAG,"register receiver")
-
 
         //毎回Alarmの設定
         setNextAlarmService(context)
@@ -344,7 +375,7 @@ class MyService : Service() {
         }
 
     // Create a BroadcastReceiver for ACTION_FOUND.
-    private val btLogReceiver = object : BroadcastReceiver() {
+    private val BtLogReceiver:BroadcastReceiver = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
             val action: String? = intent.action

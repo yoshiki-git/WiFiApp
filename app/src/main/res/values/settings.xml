@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_wifi_key">log_wifi_key</string>
+    <string name="settings_bt_key">log_bt_key</string>
+    <string name="settings_ble_key">log_ble_key</string>
+    <bool name="settings_wifi_default">true</bool>
+    <bool name="settings_bt_default">false</bool>
+    <bool name="settings_ble_default">false</bool>
+    <string name="explanation1">ログを測定する項目の設定</string>
+    <string name="explanation2">Wi-Fi情報</string>
+    <string name="explanation3">Wi-Fi APのSSID/BSSID/信号強度/周波数等を測定</string>
+    <string name="explanation4">Bluetooth情報</string>
+    <string name="explanation5">Bluetoothスキャンを実施し、端末名/BluetoothHWアドレス/信号強度等を測定</string>
+    <string name="explanation6">BLE（Bluetooth Low Energy）情報</string>
+    <string name="explanation7">未定</string>
+</resources>
