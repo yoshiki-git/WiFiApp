@@ -43,6 +43,15 @@ class MainActivity : AppCompatActivity() {
         android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
         android.Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
+    @RequiresApi(Build.VERSION_CODES.S)
+    private val permissionsS = arrayOf(
+        android.Manifest.permission.ACCESS_FINE_LOCATION,
+        android.Manifest.permission.ACCESS_COARSE_LOCATION,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.BLUETOOTH_SCAN,
+        android.Manifest.permission.BLUETOOTH_CONNECT
+    )
     lateinit var context: Context
 
     //オプションメニュー追加
@@ -81,7 +90,10 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         //permissionチェック
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+          checkPermission(permissionsS,REQUEST_CODE)
+          checkLogPermission()
+        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.R){
             checkPermission(permissions,REQUEST_CODE)
             checkLogPermission()
         }else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q){
@@ -178,6 +190,7 @@ class MainActivity : AppCompatActivity() {
 
     // requestPermissionsのコールバック
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CODE -> {
                 var i = 0
