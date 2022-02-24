@@ -78,7 +78,7 @@ class SecondFragment : Fragment() {
         super.onDestroyView()
         _binding = null
 
-        context?.unregisterReceiver(receiver)
+//        context?.unregisterReceiver(receiver)
         Log.d(TAG,"onDestroyView")
     }
 

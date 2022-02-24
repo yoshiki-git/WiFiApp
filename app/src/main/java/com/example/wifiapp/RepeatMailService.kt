@@ -1,6 +1,7 @@
 package com.example.wifiapp
 
 import android.app.*
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
@@ -55,7 +56,7 @@ class RepeatMailService : Service() {
             context,
             requestCode,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
 
         val notificationManager =
@@ -126,7 +127,7 @@ class RepeatMailService : Service() {
         val repeatPeriod = (interval* 1000*60).toLong()
         val intent = Intent(context, RepeatMailService::class.java)
         val startMillis = System.currentTimeMillis() + repeatPeriod
-        val pendingIntent = PendingIntent.getService(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getService(context, 0, intent, FLAG_IMMUTABLE)
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
@@ -136,7 +137,7 @@ class RepeatMailService : Service() {
 
     private fun stopAlarmService() {
         val indent = Intent(context, RepeatMailService::class.java)
-        val pendingIntent = PendingIntent.getService(context, 0, indent, 0)
+        val pendingIntent = PendingIntent.getService(context, 0, indent, FLAG_IMMUTABLE)
 
         // アラームを解除する
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager

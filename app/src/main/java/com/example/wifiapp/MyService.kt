@@ -1,6 +1,7 @@
 package com.example.wifiapp
 
 import android.app.*
+import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -10,6 +11,7 @@ import android.content.IntentFilter
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
 import android.util.Log
@@ -114,7 +116,7 @@ class MyService : Service() {
         stopAlarmService()
 
       //  context.unregisterReceiver(mWifiReceiver)
-        //現状クラッシュするのでコメントアウト
+        //クラッシュするのでコメントアウト
       //  context.unregisterReceiver(BtLogReceiver)
         //サービス終了
         stopSelf()
@@ -129,12 +131,21 @@ class MyService : Service() {
         val channelId = "RepeatWifiScan"
         val title = context.getString(R.string.app_name)
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S){
+            PendingIntent.getActivity(
+                context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+        }else{
+            PendingIntent.getActivity(
+                context,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
 
         val notificationManager =
             context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -251,7 +262,7 @@ class MyService : Service() {
         val intent = Intent(context, MyService::class.java)
     //    val startMillis = SystemClock.elapsedRealtime() + repeatPeriod
         val startMillis = System.currentTimeMillis() + repeatPeriod
-        val pendingIntent = PendingIntent.getService(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getService(context, 0, intent, FLAG_IMMUTABLE)
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
@@ -261,7 +272,7 @@ class MyService : Service() {
 
     private fun stopAlarmService() {
         val intent = Intent(context, MyService::class.java)
-        val pendingIntent = PendingIntent.getService(context, 0, intent, 0)
+        val pendingIntent = PendingIntent.getService(context, 0, intent, FLAG_IMMUTABLE)
 
         // アラームを解除する
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
