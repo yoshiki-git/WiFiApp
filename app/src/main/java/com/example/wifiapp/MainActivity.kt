@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
+    //BACKGROUND_LOCATIONがうまく機能してないので現状使っていない
     @RequiresApi(Build.VERSION_CODES.Q)
     private val permissionsQ = arrayOf(
         android.Manifest.permission.ACCESS_FINE_LOCATION,
