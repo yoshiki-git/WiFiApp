@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/explanation1">
+        <SwitchPreferenceCompat
+            android:key="@string/settings_wifi_key"
+            android:title="@string/explanation2"
+            android:summary="@string/explanation3"
+            android:defaultValue="@bool/settings_wifi_default" />
+        <SwitchPreferenceCompat
+            android:key="@string/settings_bt_key"
+            android:title="@string/explanation4"
+            android:summary="@string/explanation5"
+            android:defaultValue="@bool/settings_bt_default" />
+        <SwitchPreferenceCompat
+            android:key="log_item3"
+            android:title="@string/explanation6"
+            android:summary="@string/explanation7"
+            android:defaultValue="@bool/settings_ble_default"/>
+    </PreferenceCategory>
+</PreferenceScreen>

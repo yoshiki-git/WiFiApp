@@ -61,16 +61,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search_file"/>
+    <EditText
+        android:id="@+id/edit_filepath"
+        android:textSize="18sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"/>
+
     <TextView
-        android:id="@+id/tv_filepass_info"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ファイル名"/>
+    <EditText
+        android:id="@+id/edit_fileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"/>
     <Button
         android:id="@+id/btn_save_inputs"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/btn_save"/>
-
     <LinearLayout
         android:layout_marginTop="15sp"
         android:layout_width="wrap_content"
@@ -88,8 +99,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15sp"
             android:text="@string/btn_send_repeat"/>
+        <Button
+            android:id="@+id/btn_send_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15sp"
+            android:text="送信を停止"/>
 
     </LinearLayout>
-
 
 </LinearLayout>
