@@ -3,20 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/activity_log_item_setting.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/activity_mail_setting.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/bt_list_item.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/fragment_fifth.xml" value="0.35260416666666666" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/fragment_fourth.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/fragment_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/fragment_second.xml" value="0.19114583333333332" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/fragment_third.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/fragment_view_1.xml" value="0.2296195652173913" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/list_item.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/log_item_list.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/menu/option_menu_list.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/81801/AndroidStudioProjects/WiFiApp/app/src/main/res/xml/preferences.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Yoshiki/AndroidStudioProjects/WiFiApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/Yoshiki/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/activity_mail_setting.xml" value="0.2140625" />
         <entry key="..\:/Users/Yoshiki/AndroidStudioProjects/WiFiApp/app/src/main/res/layout/activity_main.xml" value="0.228125" />
@@ -25,17 +11,10 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="VisualizationToolProject">
-    <option name="state">
-      <ProjectState>
-        <option name="scale" value="0.36666666666666664" />
-      </ProjectState>
-    </option>
   </component>
 </project>
