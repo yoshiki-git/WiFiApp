@@ -16,6 +16,8 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FourthFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+//Cell情報取得用フラグメント
 class FourthFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
