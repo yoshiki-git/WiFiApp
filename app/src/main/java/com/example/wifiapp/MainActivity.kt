@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
 
 
@@ -72,6 +74,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.option_menu_2 -> {
+                val intent = Intent(this,TimerSettingActivity::class.java)
+                startActivity(intent)
             }
             R.id.option_menu_3->{
                 val intent = Intent(this,LogItemSettingActivity::class.java)
@@ -103,11 +107,26 @@ class MainActivity : AppCompatActivity() {
             checkPermission(permissions,REQUEST_CODE)
         }
 
-        //ViewPagerの設定
+        //ViewPager2 TabLayoutの設定
         val viewPager2 :ViewPager2 = findViewById(R.id.pager)
+        val tabLayout : TabLayout = findViewById(R.id.tab_layout)
+
+        //ViewPager2のAdapter設定
         val pagerAdapter = SectionPagerAdapter(this)
         viewPager2.adapter = pagerAdapter
 
+        //TabLayoutの設定
+        //TabLayoutのページ数が多い場合は、layoutFile⇒TabLayoutのandroid:tabMode属性を「scrollable」に設定
+        TabLayoutMediator(tabLayout,viewPager2){tab, position ->
+            tab.text = when(position){
+                0 -> this.resources.getString(R.string.tab_wifi)
+                1 -> this.resources.getString(R.string.tab_BT)
+                2 -> this.resources.getString(R.string.tab_BLE)
+                3 -> this.resources.getString(R.string.tab_cell)
+                4 -> this.resources.getString(R.string.tab_battery)
+                else -> "空"
+            }
+        }.attach()
 
         //ログ保存のボタン処理
         val btn_ser_start:Button = findViewById(R.id.ser_start)

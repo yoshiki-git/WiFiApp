@@ -27,6 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WiFiApp">
         <activity
+            android:name=".TimerSettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".LogItemSettingActivity"
             android:exported="false" />
 
@@ -44,7 +47,8 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
