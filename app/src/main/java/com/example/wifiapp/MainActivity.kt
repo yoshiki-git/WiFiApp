@@ -74,6 +74,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.option_menu_2 -> {
+                val intent = Intent(this,TimerSettingActivity::class.java)
+                startActivity(intent)
             }
             R.id.option_menu_3->{
                 val intent = Intent(this,LogItemSettingActivity::class.java)
