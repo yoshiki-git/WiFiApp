@@ -31,4 +31,5 @@
     <string name="tab_BLE">BLE</string>
     <string name="tab_cell">Cell</string>
     <string name="tab_battery">BAT</string>
+    <string name="tv_time">時刻選択</string>
 </resources>
