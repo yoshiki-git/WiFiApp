@@ -1,61 +1,101 @@
 package com.example.wifiapp
 
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.BatteryManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.wifiapp.databinding.FragmentFifthBinding
+import java.lang.StringBuilder
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FifthFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+//Battery情報取得用フラグメント
+//
 //Battery情報取得用フラグメント
 //
 class FifthFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private val TAG : String = "FifthFragment.kt"
+
+    private var _binding: FragmentFifthBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fifth, container, false)
+        _binding = FragmentFifthBinding.inflate(inflater,container,false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FifthFragment.
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        //バッテリー情報を取得するフィルターを定義
+        val batteryStatus: Intent? = IntentFilter(Intent.ACTION_BATTERY_CHANGED).let { ifilter ->
+            context?.registerReceiver(null, ifilter)
+        }
+
+        //バッテリーステータスの定義
+        val status: Int = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
+        val isCharging: Boolean = status == BatteryManager.BATTERY_STATUS_CHARGING
+                || status == BatteryManager.BATTERY_STATUS_FULL
+
+        //電池残量
+        val batteryPct: Float? = batteryStatus?.let { intent ->
+            val level: Int = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale: Int = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1)
+            level * 100 / scale.toFloat()
+        }
+
+        //バッテリー温度
+        val temp :Float? = batteryStatus?.let { intent ->
+            val tempInt : Int = intent.getIntExtra(BatteryManager.EXTRA_TEMPERATURE,-1)
+            tempInt/10.0f
+        }
+
+        val charge_text = if (isCharging == true){
+            "状態：充電中"
+        }else{
+            "状態：電源接続なし"
+        }
+
+        val sb = StringBuilder()
+        sb.append("電池残量:${batteryPct}%")
+            .append("\n")
+            .append("")
+            .append(charge_text)
+            .append("\n")
+            .append("バッテリー温度：${temp}℃")
+
+        binding.textViewButtery.text = sb.toString()
+
+        /*
+        binding.textViewButtery.text = "電池残量：${batteryPct}%"
+        if (isCharging == true){
+            binding.textViewButtery2.text = "状態：充電中"
+        }else{
+            binding.textViewButtery2.text = "状態：電源接続なし"
+        }
+
          */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FifthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+
+
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+
+        Log.d(TAG,"onDestroyView")
     }
 }

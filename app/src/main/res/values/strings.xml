@@ -31,5 +31,7 @@
     <string name="tab_BLE">BLE</string>
     <string name="tab_cell">Cell</string>
     <string name="tab_battery">BAT</string>
-    <string name="tv_time">時刻選択</string>
+    <string name="tv_time">時刻を入力</string>
+    <string name="tv_start_time">ログ取得開始時刻</string>
+    <string name="tv_stop_time">ログ取得終了時刻</string>
 </resources>

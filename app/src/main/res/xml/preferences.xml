@@ -16,5 +16,15 @@
             android:title="@string/explanation6"
             android:summary="@string/explanation7"
             android:defaultValue="@bool/settings_ble_default"/>
+        <SwitchPreferenceCompat
+            android:key="@string/setting_cell_key"
+            android:title="@string/explanation8"
+            android:summary="@string/explanation9"
+            android:defaultValue="@bool/settings_cell_default"/>
+        <SwitchPreferenceCompat
+            android:key="@string/setting_bat_ley"
+            android:title="@string/explanation10"
+            android:summary="@string/explanation11"
+            android:defaultValue="@bool/settings_bat_default"/>
     </PreferenceCategory>
 </PreferenceScreen>
